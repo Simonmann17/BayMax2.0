@@ -48,17 +48,17 @@ def create_access_token(data: dict) -> str:
     expire = datetime.now(timezone.utc) + timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     to_encode.update({"exp": expire})
     return jwt.encode(
-        to_encode, 
-        settings.SECRET_KEY, 
+        to_encode,
+        settings.SECRET_KEY,
         algorithm=settings.ALGORITHM)
 
 
 @router.post("/register", response_model=Token)
 def register(user: UserCreate, db: Session = Depends(get_db)):
     existing_user = db.query(User).filter(User.email == user.email).first()
-    if existing_user: 
+    if existing_user:
         raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST, 
+            status_code=status.HTTP_400_BAD_REQUEST,
             detail="Email already registered"
         )
 
@@ -72,8 +72,8 @@ def register(user: UserCreate, db: Session = Depends(get_db)):
 
     access_token = create_access_token(data={"sub": new_user.email})
     return {
-        "access_token": access_token, 
-        "token_type": "bearer", 
+        "access_token": access_token,
+        "token_type": "bearer",
         "message": "User registered successfully"
     }
 
@@ -83,14 +83,14 @@ def login(user: UserLogin, db: Session = Depends(get_db)):
     db_user = db.query(User).filter(User.email == user.email).first()
     if not db_user or not verify_password(user.password, db_user.hashed_password):
         raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED, 
+            status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid email or password"
         )
 
     access_token = create_access_token(data={"sub": db_user.email})
 
     return {
-        "access_token": access_token, 
-        "token_type": "bearer", 
+        "access_token": access_token,
+        "token_type": "bearer",
         "message": "Login successful"
     }
