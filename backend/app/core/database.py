@@ -8,14 +8,17 @@ engine = create_engine(settings.DATABASE_URL)
 # Create a configured "Session" class
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
+
 # Create a base class for declarative models
 class Base(DeclarativeBase):
-	pass
+    pass
+
 
 # Dependency to get DB session
 def get_db():
-	db = SessionLocal()
-	try:
-		yield db
-	finally:
-		db.close()
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+      
