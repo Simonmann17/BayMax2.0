@@ -2,7 +2,7 @@ from pydantic_settings import BaseSettings
 
 
 class Settings(BaseSettings):
-    
+
     # Database URL (e.g., PostgreSQL, MySQL, SQLite)
     DATABASE_URL: str
 
