@@ -24,7 +24,7 @@ app.include_router(auth.router)
 
 
 @app.get("/")
-def root(): 
+def root():
     return {"message": "Welcome to the BayMax Symptom Checker API!"}
 
 
